@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Server settings" >
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="host"
+            android:summary="Enter server host name"
+            android:title="Host name" />
+
+        <si.majeric.android.ui.IntEditTextPreference
+            android:defaultValue="8000"
+            android:key="port"
+            android:maxLength="5"
+            android:numeric="integer"
+            android:summary="Enter server port"
+            android:title="Port" />
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="sh_home_wifi"
+            android:summary="Enter home WiFi SSID"
+            android:title="SSID" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Security" >
+        <EditTextPreference
+            android:defaultValue=""
+            android:key="sh_username"
+            android:summary="Enter username"
+            android:title="Username" />
+        <EditTextPreference
+            android:inputType="textPassword"
+            android:key="sh_password"
+            android:summary="Enter password"
+            android:title="Password" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

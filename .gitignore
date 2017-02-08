@@ -1,0 +1,26 @@
+/.project
+/.settings
+/target
+/smart-house-android/res/values/com_crashlytics_export_strings.xml
+/smart-house-android/assets/crashlytics-build.properties
+
+# Android Studio
+*.iml
+.idea
+
+#.idea/workspace.xml - remove # and delete .idea if it better suit your needs.
+.gradle
+build/
+
+# Local configuration file (sdk path, etc)
+/local.properties
+/my-notes
+
+.DS_Store
+variables
+smart-house
+config.properties
+logback-with-mail.xml
+.bash_history
+smart-house-server.jar
+tools/server/home/pi/smart-house/keystore/keystore.jks

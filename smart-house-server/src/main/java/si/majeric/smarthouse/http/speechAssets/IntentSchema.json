@@ -1,0 +1,26 @@
+{
+  "intents": [
+    {
+      "intent": "LightsIntent",
+      "slots": [
+        {
+          "name": "Room",
+          "type": "LIST_OF_ROOMS"
+        },
+        {
+          "name": "State",
+          "type": "LIST_OF_STATES"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}

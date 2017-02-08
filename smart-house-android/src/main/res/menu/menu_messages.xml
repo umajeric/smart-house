@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_send_messages"
+        android:icon="@android:drawable/ic_menu_send"
+        android:orderInCategory="10"
+        android:showAsAction="always"
+        android:title="@string/menu_send_messages"/>
+
+</menu>

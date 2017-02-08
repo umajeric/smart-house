@@ -1,0 +1,342 @@
+/**
+ * Filename: index.handler
+ *
+ * This sample demonstrates a simple driver  built against the Alexa Lighting Api.
+ * For additional details, please refer to the Alexa Lighting API developer documentation
+ * https://developer.amazon.com/public/binaries/content/assets/html/alexa-lighting-api.html (https://github.com/amzn/alexa-coho)
+ */
+var https = require('https');
+var http = require('http');
+
+/**
+ * Main entry point.
+ * Incoming events from Alexa Lighting APIs are processed via this method.
+ */
+exports.handler = function(event, context) {
+
+    log('Input', event);
+
+    switch (event.header.namespace) {
+
+        /**
+         * The namespace of "Discovery" indicates a request is being made to the lambda for
+         * discovering all appliances associated with the customer's appliance cloud account.
+         * can use the accessToken that is made available as part of the payload to determine
+         * the customer.
+         */
+        case 'Alexa.ConnectedHome.Discovery':
+            handleDiscovery(event, context);
+            break;
+
+            /**
+             * The namespace of "Control" indicates a request is being made to us to turn a
+             * given device on, off or brighten. This message comes with the "appliance"
+             * parameter which indicates the appliance that needs to be acted on.
+             */
+        case 'Alexa.ConnectedHome.Control':
+            handleControl(event, context);
+            break;
+
+        case 'Alexa.ConnectedHome.System':
+            handleSystemEvent(event, context);
+            break;
+
+            /**
+             * We received an unexpected message
+             */
+        default:
+            log('Err', 'No supported namespace: ' + event.header.namespace);
+            context.fail('Something went wrong');
+            break;
+    }
+};
+
+/**
+ * This method is invoked when we receive a "Discovery" message from Alexa Smart Home Skill.
+ * We are expected to respond back with a list of appliances that we have discovered for a given
+ * customer.
+ */
+function handleDiscovery(event, context) {
+    /**
+     * Crafting the response header
+     */
+    var headers = {
+        messageId: event.header.messageId,
+        namespace: 'Alexa.ConnectedHome.Discovery',
+        name: 'DiscoverAppliancesResponse',
+        payloadVersion: '2'
+    };
+
+    var post_data = '<si.majeric.smarthouse.tpt.Request><__type>GetConfiguration</__type><__properties/></si.majeric.smarthouse.tpt.Request>';
+
+    var options = {
+        host: process.env.SH_HOST,
+        port: process.env.SH_PORT,
+        method: 'POST',
+        family: 4,
+        headers: {
+            Authorization: 'Basic ' + new Buffer(process.env.SH_USERNAME + ':' + generatePassword()).toString('base64'),
+            Accept: 'application/json',
+        }
+    };
+    console.log(generatePassword());
+    var request = http.request(options, function(res) {
+        var body = "";
+        res.on('data', function(data) {
+            body += data;
+        });
+        res.on('end', function() {
+            /**
+             * Response body will be an array of discovered devices.
+             */
+            var appliances = [];
+
+            var response = JSON.parse(body);
+
+            // TODO
+            for (var i = 0, iLen = response.object.floors.length; i < iLen; i++) {
+                var floor = response.object.floors[i];
+                for (var j = 0, jLen = floor.rooms.length; j < jLen; j++) {
+                    var room = floor.rooms[j];
+                    for (var k = 0, kLen = room.switches.length; k < kLen; k++) {
+                        var swtch = room.switches[k];
+                        if ((swtch.name.toUpperCase().indexOf("DOORS") < 0) && swtch.triggers.length > 0) {
+                            var applianceDiscovered = {
+                                applianceId: swtch.id,
+                                manufacturerName: 'MajericSH',
+                                modelName: 'MajericSH',
+                                version: 'MajericSH-1',
+                                friendlyName: room.name + ' ' + swtch.name,
+                                friendlyDescription: swtch.name + ' in ' + room.name,
+                                isReachable: true,
+                                additionalApplianceDetails: {
+                                }
+                            };
+                            appliances.push(applianceDiscovered);
+                        }
+                    }
+                }
+            }
+
+            /**
+             * Craft the final response back to Alexa Connected Home Skill. This will include all the
+             * discovered appliances.
+             */
+            var payloads = {
+                discoveredAppliances: appliances
+            };
+            var result = {
+                header: headers,
+                payload: payloads
+            };
+
+            // console.log('Discovery', response);
+            // if (response.succeeded) {
+                context.succeed(result);
+            // } else {
+                // context.fail(result);
+            // }
+        });
+        res.on('error', function(e) {
+            console.log('Error', e.message);
+            var payload = {
+                exception: {
+                    code: 'DEPENDENT_SERVICE_UNAVAILABLE',
+                    description: 'Unable to connect to server'
+                }
+            };
+
+            var result = {
+                header: headers,
+                payload: payload
+            };
+
+            context.fail(result);
+        });
+    });
+    request.write(post_data);
+    request.end();
+}
+
+/**
+ * Control events are processed here.
+ * This is called when Alexa requests an action (IE turn off appliance).
+ */
+function handleControl(event, context) {
+
+    /**
+     * Fail the invocation if the header is unexpected. This example only demonstrates
+     * turn on / turn off, hence we are filtering on anything that is not SwitchOnOffRequest.
+     */
+    if (event.header.namespace != 'Alexa.ConnectedHome.Control' && !(event.header.name == 'TurnOffRequest' || event.header.name == 'TurnOnRequest')) {
+        log('Wrong event', event.header.namespace + ' / ' + event.header.name);
+        context.fail(generateControlError(event.header.name, 'UNSUPPORTED_OPERATION', 'Unrecognized operation'));
+    } else {
+
+        /**
+         * Retrieve the appliance id and accessToken from the incoming message.
+         */
+        var applianceId = event.payload.appliance.applianceId;
+        var accessToken = event.payload.accessToken.trim();
+        log('applianceId', applianceId);
+
+        var responseName = null;
+        var triggerType  = null;
+        if (event.header.name == 'TurnOnRequest') {
+            responseName = 'TurnOnConfirmation';
+            triggerType  = 'TPULSE';
+        } else if (event.header.name == 'TurnOffRequest') {
+            responseName = 'TurnOffConfirmation';
+            triggerType  = 'SET';
+        }
+        var headers = {
+            namespace: event.header.namespace,
+            name: responseName,
+            payloadVersion: event.header.payloadVersion,
+            messageId: event.header.messageId
+        };
+
+        var post_data = ''
+            + '<si.majeric.smarthouse.tpt.Request>'
+            + '  <__type>Invoke</__type>'
+            + '  <__switch>'
+            + '    <id>' + applianceId + '</id>'
+            + '  </__switch>'
+            + '  <__triggerConfig>'
+            + '    <type>' + triggerType + '</type>'
+            // + '    <newState>' + '' + '</newState>'
+            + '  </__triggerConfig>'
+            + '  <__properties/>'
+            + '</si.majeric.smarthouse.tpt.Request>';
+
+        var options = {
+            host: process.env.SH_HOST,
+            port: process.env.SH_PORT,
+            method: 'POST',
+            family: 4,
+            headers: {
+                Authorization: 'Basic ' + new Buffer(process.env.SH_USERNAME + ':' + generatePassword()).toString('base64'),
+                Accept: 'application/json',
+            }
+        };
+
+        var serverError = function(e) {
+            log('Error', e.message);
+            var payload = {
+                exception: {
+                    code: 'DEPENDENT_SERVICE_UNAVAILABLE',
+                    description: 'Unable to connect to server'
+                }
+            };
+
+            var result = {
+                header: headers,
+                payload: payload
+            };
+
+            context.fail(result);
+        };
+
+        var callback = function(response) {
+            var str = '';
+
+            response.on('data', function(chunk) {
+                str += chunk.toString('utf-8');
+            });
+
+            response.on('end', function() {
+                /**
+                 * Test the response from remote endpoint (not shown) and craft a response message
+                 * back to Alexa Smart Home Skill
+                 */
+                log('done with result');
+
+                var payloads = {
+                    success: true
+                };
+                var result = {
+                    header: headers,
+                    payload: payloads
+                };
+                log('Done with result', result);
+                context.succeed(result);
+            });
+
+            response.on('error', serverError);
+        };
+
+        /**
+         * Make a call to remote endpoint.
+         */
+        var request = http.request(options, callback)
+            .on('error', serverError);
+        request.write(post_data);
+        request.end();
+    }
+}
+
+// System, handles health check related requests
+function handleSystemEvent(event, context) {
+    // TODO always return healthy; currently does not handle unhealthy responses.  Needs detect and handle offline bridge, outdated firmware, etc...
+    if(event.header.name === 'HealthCheckRequest') {
+        var header = {
+            name: 'HealthCheckResponse',
+            namespace: 'Alexa.ConnectedHome.System',
+            payloadVersion: '2',
+            messageId: event.header.messageId
+        };
+        var payload = {
+            description: 'The system is currently healthy',
+            isHealthy: true
+        };
+        var result = {
+            header: header,
+            payload: payload
+        };
+
+        context.succeed(result);
+    }
+    else {
+        console.log('ERROR: Unsupported System request: ' + event.header.name);
+        context.fail('Something went wrong');
+    }
+}
+
+/**
+ * Utility functions.
+ */
+function log(title, msg) {
+    console.log('*************** ' + title + ' *************');
+    console.log(msg);
+    console.log('*************** ' + title + ' End*************');
+}
+
+function generatePassword() {
+    var password = process.env.SH_PASSWORD;
+    var date = new Date();
+    var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+    var nd = new Date(utc + (3600000 * 1));
+    return password + nd.getHours();
+}
+
+function generateControlError(name, code, description) {
+    var headers = {
+        namespace: 'Alexa.ConnectedHome.Control',
+        name: name,
+        payloadVersion: '2'
+    };
+
+    var payload = {
+        exception: {
+            code: code,
+            description: description
+        }
+    };
+
+    var result = {
+        header: headers,
+        payload: payload
+    };
+
+    return result;
+}

@@ -1,0 +1,34 @@
+LightsIntent lights
+LightsIntent lights {Room} {State}
+LightsIntent turn lights {Room} {State}
+LightsIntent lights {State}
+LightsIntent lights {Room}
+LightsIntent lights in {Room}
+LightsIntent for lights in {Room}
+LightsIntent lights for {Room}
+LightsIntent {Room}
+LightsIntent {Room} {State}
+LightsIntent lights in {Room} {State}
+LightsIntent lights for {Room} {State}
+LightsIntent lights for {Room} {State} for {Duration}
+LightsIntent lights for {Room} for {Duration}
+LightsIntent lights in {Room} for {Duration}
+LightsIntent lights {State} in {Room}
+LightsIntent lights {State} in {Room} for {Duration}
+LightsIntent light
+LightsIntent light {Room} {State}
+LightsIntent turn light {Room} {State}
+LightsIntent light {State}
+LightsIntent light {Room}
+LightsIntent light in {Room}
+LightsIntent for light in {Room}
+LightsIntent light for {Room}
+LightsIntent {Room}
+LightsIntent {Room} {State}
+LightsIntent light in {Room} {State}
+LightsIntent light for {Room} {State}
+LightsIntent light for {Room} {State} for {Duration}
+LightsIntent light for {Room} for {Duration}
+LightsIntent light in {Room} for {Duration}
+LightsIntent light {State} in {Room}
+LightsIntent light {State} in {Room} for {Duration}

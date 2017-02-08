@@ -1,0 +1,4 @@
+export SH_USERNAME=user
+export SH_PASSWORD=pass
+export SH_HOST=localhost
+export SH_PORT=8000

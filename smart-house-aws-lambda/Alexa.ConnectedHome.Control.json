@@ -1,0 +1,15 @@
+{
+  "header": {
+    "namespace": "Alexa.ConnectedHome.Control",
+    "name": "TurnOffRequest",
+    "payloadVersion": "2",
+    "messageId": "9a1e4174-33d4-43ec-a5a5-3c56189c530d"
+  },
+  "payload": {
+    "accessToken": "Atza|IwEBIARHuzX6G_jMkyZOHuuDazxb9su4LrCJRb7Vf8DLLXFUbHu_ZPzN4FLUFQFFPWfstiR6eKsyM2e6fKdAYnFnZWHWFatH1AawOFHbkLhmEuCSAet12GI5Ye-N0LPV2-QlYWKnUPTaWvGS4SI5jSfoWl9aS4SXX3ujGRxkur4pwzP8gY0PVjIrE2jCFsgp37e-aY4cVeBkVdgWG0DHpcVm4yekxn2lKJ3TvCtKfnfwYNuNmXdfnvHs9eel_a4Cw6bu957acJ2Ublfs1ZOi8-FKLIHTlvI6bXLl43d_q_q3sqKLV-mE0J4mVPakkaNpBQ3sUt95s16XBNv-r_IqjhU6gW1qjbXCncA_uRuUjp8H_YAfcHjly6ORNYeSvH-8Ux8A0GZKgc3sqo8yaXByQgJdQxejSqC88R8vdwEENV13PRWa-b7I3kJLSj41HSwJUVdMB0zgC7haPpfR5myEqOTw1xYvD2E6dK7QuPRwyQpasuSU_Q",
+    "appliance": {
+      "applianceId": "KuhinjaLuc",
+      "additionalApplianceDetails": {}
+    }
+  }
+}

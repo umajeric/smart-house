@@ -1,0 +1,7 @@
+<resources>
+
+    <string name="app_name">Smart House</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_send_messages">Send Messages</string>
+
+</resources>

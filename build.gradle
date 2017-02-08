@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.3'
+    }
+}
+
+apply plugin: 'java'
+
+allprojects {
+    apply plugin: 'maven'
+
+    group = 'si.majeric.smarthouse'
+    version = '1.0.1-SNAPSHOT'
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = "1.7"
+        targetCompatibility = "1.7"
+    }
+}
+
+subprojects {
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
+
+
+    repositories {
+        mavenLocal()
+        jcenter()
+        maven { url "https://maven.java.net/content/repositories/public/" }
+        maven { url "http://repo.maven.apache.org/maven2/" }
+        maven { url "http://repository.primefaces.org" }
+        maven { url "https://oss.sonatype.org/content/groups/public" }
+        maven { url "http://download.crashlytics.com/maven" }
+        maven { url "http://repo.maven.apache.org/maven2" }
+    }
+
+
+}

@@ -1,0 +1,14 @@
+rootProject.name = 'smart-house-parent'
+include ':smart-house-library', ':smart-house-wear'
+include ':smart-house-server'
+include ':smart-house-xstream-impl'
+include ':smart-house-client'
+include ':smart-house-persistence'
+include ':smart-house-android'
+
+project(':smart-house-library').projectDir = "$rootDir/smart-house-library" as File
+project(':smart-house-server').projectDir = "$rootDir/smart-house-server" as File
+project(':smart-house-xstream-impl').projectDir = "$rootDir/smart-house-xstream-impl" as File
+project(':smart-house-client').projectDir = "$rootDir/smart-house-client" as File
+project(':smart-house-persistence').projectDir = "$rootDir/smart-house-persistence" as File
+project(':smart-house-android').projectDir = "$rootDir/smart-house-android" as File

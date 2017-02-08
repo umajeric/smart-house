@@ -1,0 +1,47 @@
+bind-address=0.0.0.0
+bind-port=8000
+config-model-file=/etc/smart-house-model
+log-messages-size=1000
+username=test
+password=test
+known-ip-list=192.168.1.100
+
+ssl.keyStorePath=/Users/uros/workspaces/as/SmartHouse/develop/majeric.keystore
+ssl.keyStorePassword={keystore-pass}
+ssl.keyManagerPassword={keymanager-pass}
+ssl.trustStorePath=/Users/uros/workspaces/as/SmartHouse/develop/majeric.keystore
+ssl.trustStorePassword={truststore-pass}
+
+# SMSAPI properties (set them in /etc/smart-house file)
+# smsapi.to=
+smsapi.un=
+smsapi.ps=
+smsapi.from=031480333
+smsapi.cc=386
+
+# ZeroPush properties (set in /etc/smart-house file)
+zeropush.auth_token=
+zeropush.collapse_key=smart-house-push
+zeropush.delay_while_idle=false
+zeropush.time_to_live=40320
+
+#Databox Push
+databox.enabled=false
+databox.host=https://push.databox.com
+databox.port=443
+databox.token=
+
+# path where motion detection files are stored (comment out to disable motion detection)
+motion.detection.path=/tmp/ftp/
+
+# Email settings (required for motion detection)
+mail.enabled=true
+mail.smtpHost=smtp.gmail.com
+mail.smtpPort=465
+mail.username={mail-username}
+mail.password={mail-password}
+mail.from={mail-username-for-google-apps}
+mail.to=uros@majeric.si
+mail.isSTARTTLS=false
+mail.isSSL=true
+#mail.localhost=localhost

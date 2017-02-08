@@ -1,0 +1,96 @@
+description = 'smart-house-android'
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.3'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+dependencies {
+    compile project(':smart-house-client')
+    compile 'com.onesignal:OneSignal:2.+@aar'
+    compile 'com.android.support:support-v4:22.2.0'
+    compile 'com.google.android.gms:play-services-gcm:7.3.0'
+    compile 'com.google.android.gms:play-services-wearable:8.4.0'
+    compile 'com.loopj.android:android-async-http:1.4.5'
+    compile group: 'com.github.tony19', name: 'logback-android-classic', version: '1.0.10-2'
+    testCompile(group: 'junit', name: 'junit', version: '4.10') {
+        exclude(module: 'hamcrest-core')
+    }
+
+}
+
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 10
+        applicationId "si.majeric.smarthouse"
+        versionName "1.0.2"
+        manifestPlaceholders = [manifestApplicationId: "${applicationId}",
+                                onesignal_app_id: "a52cde32-60e4-4a05-8bdd-22f90b8d979a",
+                                onesignal_google_project_number: "117875663683"]
+    }
+
+    signingConfigs {
+        debug {
+        }
+
+        release {
+            storeFile file('../develop/majeric.keystore')
+            storePassword "password"
+            keyAlias "alias"
+            keyPassword "password"
+        }
+    }
+
+    buildTypes {
+        // TODO buildConfigField
+        debug {
+            debuggable true
+//            applicationIdSuffix ".debug"
+            buildConfigField "boolean", "USE_LOGCAT", "true"
+            buildConfigField "boolean", "USE_CRASHLYTICS", "false"
+            ext.enableCrashlytics = true
+        }
+
+        release {
+            debuggable false
+
+            // proguard
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard.cfg'
+//            signingConfig signingConfigs.release
+            ext.enableCrashlytics = true
+
+            buildConfigField "boolean", "USE_LOGCAT", "false"
+            buildConfigField "boolean", "USE_CRASHLYTICS", "true"
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'src/main/AndroidManifest.xml'
+            res.srcDirs = ['src/main/res']
+            assets.srcDirs = ['src/main/assets']
+            aidl.srcDirs = ['src/test/java', 'src/main/java']
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+        instrumentTest.setRoot('tests')
+    }
+}

@@ -1,0 +1,55 @@
+apply plugin: 'com.android.application'
+
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "si.majeric.smarthouse"
+        minSdkVersion 23
+        targetSdkVersion 23
+        versionCode 10
+        versionName "1.0.2"
+    }
+    buildTypes {
+        debug {
+            debuggable true
+            buildConfigField "boolean", "USE_LOGCAT", "true"
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            java {
+                exclude 'si/majeric/smarthouse/cron/**'
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile(project(':smart-house-client')) {
+        exclude group: 'org.json'
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile 'com.google.android.support:wearable:1.4.0'
+    compile 'com.google.android.gms:play-services-wearable:9.4.0'
+    compile group: 'com.github.tony19', name: 'logback-android-classic', version: '1.0.10-2'
+
+}

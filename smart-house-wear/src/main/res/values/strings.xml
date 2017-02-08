@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Smart House</string>
+    <string name="hello_round">Hello Round World!</string>
+    <string name="hello_square">Hello Square World!</string>
+
+    <string name="start_timer">Open the doors</string>
+    <string name="notification_title">DelayedConfirmation</string>
+    <string name="notification_timer_selected">Timer Selected</string>
+    <string name="notification_timer_finished">Timer Finished</string>
+    <string name="no_device_found">No device able to confirm was found</string>
+</resources>

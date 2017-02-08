@@ -1,0 +1,12 @@
+apply plugin: 'java'
+description = 'smart-house-persistence'
+dependencies {
+    compile project(':smart-house-library')
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.5'
+
+    testCompile project(path: ':smart-house-library', configuration: 'testOutput')
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+    testCompile group: 'org.eclipse.persistence', name: 'org.eclipse.persistence.jpa', version: '2.5.1'
+    testCompile group: 'com.h2database', name: 'h2', version: '1.3.174'
+    testCompile group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.13'
+}

@@ -1,0 +1,62 @@
+# Rename this file to 'smart-house'
+# base SmartHouse config - enter values of your choice (we will used them later)
+bind-address=0.0.0.0
+bind-port=8000
+username={sh-username}
+password={sh-password}
+
+# List of IPs that will turn of the alarm (set the IPs on the router DHCP)
+known-ip-list=192.168.1.100
+
+# Databox - statistics (see more at: https://developers.databox.com/)
+databox.enabled=false
+databox.host=https://push.databox.com
+databox.port=443
+databox.token={get_it_from_databox}
+
+# path where motion detection files are stored (comment out to disable motion detection)
+# cameras should have set FTP saving of motion detection
+motion.detection.path=/home/pi/FTP
+
+# Email settings (required for motion detection)
+mail.enabled=true
+mail.smtpHost=smtp.gmail.com
+mail.smtpPort=465
+mail.username={mail-username}
+mail.password={mail-password}
+mail.from={mail-username-for-google-apps}
+mail.to=uros@majeric.si
+mail.isSTARTTLS=false
+mail.isSSL=true
+#mail.localhost=localhost
+
+# Camera 1 - Entrance
+cam1.enabled=false
+cam1.host=http://192.168.1.20
+cam1.path=/web/cgi-bin/hi3510/param.cgi
+cam1.username=
+cam1.password=
+
+# ZeroPush config
+zeropush.auth_token=
+
+# PushWoosh config
+pushwoosh.auth_token=
+pushwoosh.app_code=
+
+# OneSignal
+onesignal.app_id=
+onesignal.api_key=
+
+# SMS API config (not in use currently)
+smsapi.to={your-phone-number}
+smsapi.un={sms-api-username}
+smsapi.ps={sms-api-password}
+
+# SSL Config
+ssl.enabled=true
+ssl.keyStorePath=/home/pi/smart-house/keystore/keystore.jks
+ssl.keyStorePassword={keystore-pass}
+ssl.keyManagerPassword={keymanager-pass}
+ssl.trustStorePath=/home/pi/smart-house/keystore/keystore.jks
+ssl.trustStorePassword={truststore-pass}
