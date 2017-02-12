@@ -27,7 +27,7 @@ Then:
 `curl -X POST http://$SH_HOST:$SH_PORT/import?fileName=/home/pi/smart-house/konfiguracija-hisa.xlsx -u $SH_USERNAME:$SH_PASSWORD`
 
 
-# FTP server on USB
+# FTP server on USB (optional)
 
 ###   1. create folder for mount
 `sudo mkdir /mnt/usb`
@@ -84,7 +84,7 @@ Update the `motion.detection.path` with path from above:
 `sudo nano /etc/smart-house`
 
 
-# Bluetooth sound card
+# Bluetooth sound card (optional)
 
 Edit `/etc/modprobe.d/alsa-base.conf` and put lines below to the file
 
