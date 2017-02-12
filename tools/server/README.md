@@ -12,7 +12,7 @@
 ## Set the correct timezone
 `sudo dpkg-reconfigure tzdata` or even better `sudo timedatectl set-timezone Europe/Ljubljana`
 
-## Restart every morning at 4 AM
+## Restart every morning at 4 AM (reconfigure crons for switches - needs to be fixed)
 `(sudo crontab -l 2>/dev/null; echo "0 4 * * * /etc/init.d/smart-house restart") | sudo crontab -`
 
 ## Start the smart house
