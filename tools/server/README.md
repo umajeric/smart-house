@@ -22,6 +22,8 @@
 ## Import the configuration
 
 Export variables from "tools/variables" first: `source tools/variables`
+
+Then:
 `curl -X POST http://$SH_HOST:$SH_PORT/import?fileName=/home/pi/smart-house/konfiguracija-hisa.xlsx -u $SH_USERNAME:$SH_PASSWORD`
 
 
@@ -44,32 +46,41 @@ Export variables from "tools/variables" first: `source tools/variables`
 `sudo apt-get install pure-ftpd`
 
 We need to create a new user group named ftpgroup and a new user named  ftpuser for FTP users, and make sure this "user" has NO log in privilge and NO home directory:
-`sudo groupadd ftpgroup
-sudo useradd ftpuser -g ftpgroup -s /sbin/nologin -d /dev/null
 
-Make a new directory named `ftp` for the user
+`sudo groupadd ftpgroup`
+
+`sudo useradd ftpuser -g ftpgroup -s /sbin/nologin -d /dev/null`
+
+Make a new directory named `ftp` for the user:
+
 `sudo mkdir /mnt/usb/ftp`
 
-Make sure the directory is accessible for `ftpuser` user
+Make sure the directory is accessible for `ftpuser` user:
+
 `sudo chown -R ftpuser:ftpgroup /mnt/usb/ftp`
 
 Create a virtual user named upload, mapping the virtual user to ftpuser and  ftpgroup, setting home directory /home/pi/FTP, and record password of the user in database
 - user: `upload`
 - pass: `camupload`
+
 `sudo pure-pw useradd upload -u ftpuser -g ftpgroup -d /mnt/usb/ftp -m`
 
-Set up a virtual user database
+Set up a virtual user database:
+
 `sudo pure-pw mkdb`
 
-Define an authentication method by making a link of file  /etc/pure-ftpd/conf/PureDB, the number 60 is only for demonstration, make it as small as necessary
+Define an authentication method by making a link of file  /etc/pure-ftpd/conf/PureDB, the number 60 is only for demonstration, make it as small as necessary:
+
 `sudo ln -s /etc/pure-ftpd/conf/PureDB /etc/pure-ftpd/auth/60puredb`
 
-Restart the ftp server
+Restart the ftp server:
+
 `sudo service pure-ftpd restart`
 
 Test it with an FTP client, like FileZilla
 
-Update the "motion.detection.path" with path from above
+Update the "motion.detection.path" with path from above:
+
 `sudo nano /etc/smart-house`
 
 
@@ -90,7 +101,9 @@ List sound cards:
 `cat /proc/asound/modules`
 
 ### Record sound
-`arecord [-D plughw:0,0] -q -t wav -d 0 -f S16_LE -r 16000 temp.wav`
+
+`arecord [-D plughw:0,0] -q -t wav -d 0 -f S16_LE -r 16000temp.wav`
+
 `arecord -q -t wav -d 0 -f S16_LE -r 16000 temp.wav`
 
 ### Play sound
