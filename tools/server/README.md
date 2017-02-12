@@ -4,9 +4,11 @@
 
 Follow the instructions: https://www.raspberrypi.org/documentation/installation/installing-images/ to install OS on Raspberry Pi.
 
-Enable SSH and i2c on it.
+Enable SSH and i2c on it - I used `raspi-config` to do that.
 
 ## Steps required for `SmartHouse`
+
+SSH to the server and do the following steps.
 
 ### Java IS required :-)
 `sudo apt-get update && sudo apt-get install oracle-java8-jdk`
