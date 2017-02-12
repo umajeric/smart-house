@@ -79,7 +79,7 @@ Restart the ftp server:
 
 Test it with an FTP client, like FileZilla
 
-Update the "motion.detection.path" with path from above:
+Update the `motion.detection.path` with path from above:
 
 `sudo nano /etc/smart-house`
 
