@@ -1,29 +1,36 @@
 # Server installation
 
-## Java IS required :-)
+## First install Raspian
+
+Follow the instructions: https://www.raspberrypi.org/documentation/installation/installing-images/ to install OS on Raspberry Pi.
+
+## Steps required for `SmartHouse`
+
+### Java IS required :-)
 `sudo apt-get update && sudo apt-get install oracle-java8-jdk`
 
-## Create directories needed for application
+### Create directories needed for application
 `mkdir /home/pi/smart-house && mkdir /home/pi/smart-house/run && mkdir /home/pi/smart-house/log`
 
-## Start the service at server start
+### Start the service at server start
 `sudo update-rc.d smart-house defaults`
 
-## Set the correct timezone
+### Set the correct timezone
 `sudo dpkg-reconfigure tzdata` or even better `sudo timedatectl set-timezone Europe/Ljubljana`
 
-## Restart every morning at 4 AM (reconfigure crons for switches - needs to be fixed)
+### Restart every morning at 4 AM (reconfigure crons for switches - needs to be fixed)
 `(sudo crontab -l 2>/dev/null; echo "0 4 * * * /etc/init.d/smart-house restart") | sudo crontab -`
 
-## Start the smart house
+### Start the smart house
 `sudo chmod +x /etc/init.d/smart-house`
 `sudo /etc/init.d/smart-house start`
 
-## Import the configuration
+### Import the configuration
 
 Export variables from "tools/variables" first: `source tools/variables`
 
 Then:
+
 `curl -X POST http://$SH_HOST:$SH_PORT/import?fileName=/home/pi/smart-house/konfiguracija-hisa.xlsx -u $SH_USERNAME:$SH_PASSWORD`
 
 
