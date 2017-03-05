@@ -13,7 +13,7 @@
 
 ## Documentation
 
-See the `doc` directory for more detailed documentation - TBD
+See the `doc` directory for more detailed documentation - see the [Server installation](tools/server) as a starting point for now
 
 ## License
 
